@@ -1,0 +1,104 @@
+---
+title: "Untitled"
+author: "Andrew vanderWilden"
+date: "2/19/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+```{r}
+library(tidyverse)
+```
+
+
+[Original 538 Post](https://fivethirtyeight.com/features/why-revoking-trumps-executive-orders-isnt-enough-to-undo-their-effects/)
+
+```{r}
+df1 <- tibble(
+  President = c('Truman', 'Eisenhower', 'Kennedy', 'Johnson', 'Nixon', 'Ford',
+                'Carter', 'Reagan', 'G.H.W. Bush', 'Clinton', 'G.W. Bush',
+                'Obama', 'Trump', 'Biden'),
+  Party = c('Dem', 'Rep', 'Dem', 'Dem', 'Rep', 'Rep', 'Dem', 'Rep', 'Rep', 'Dem',
+            'Rep', 'Dem', 'Rep', 'Dem'),
+  Other = c(0,0,0,5,0,3,5,18,4,0,0,0,8,0),
+  Orders = c(2,1,11,0,1,1,3,9,3,2,4,9,7,31)
+) %>%
+  mutate(President = factor(President, levels = President))
+
+```
+
+
+
+```{r}
+ggplot(df1, aes(Orders, President)) +
+  geom_segment(aes(x = 0, xend = Other, y = President, yend = President),
+               color = 'grey60', size = 4) +
+  geom_segment(aes(x = 0, xend = Orders, y = President, yend = President,
+                   color = Party), size = 4) +
+  scale_color_manual(values = c('#008fd5', '#ff2700'),
+                     name = "REVOCATIONS OF PREDECESSOR'S ORDERS",
+                     labels = c('','')) +
+  geom_vline(xintercept = 0, color = 'black') +
+  scale_x_continuous(breaks = c(0,10,20,30), position = 'top') +
+  geom_curve(aes(x = 15, xend = 13.5, y = 12, yend = 13.65),
+             arrow = arrow(length = unit(0.03, 'npc')),
+             curvature = -.4) +
+  geom_segment(aes(x = 19, xend = 21, y = 12, yend = 12),
+               color = 'grey90', size = 14) +
+  geom_text(aes(x = 20, y = 12,
+            label = "Biden has revoked 31 of\nTrump's executive orders"),
+            color = '#2b3033',
+            size = 3.25) +
+  guides(color = guide_legend(title.position = 'right')) +
+  
+  labs(title = "Biden started his legacy by undoing Trump's",
+       subtitle = 'Executive order revocations, by president, in the first 100 days of office*',
+       y = '', 
+       x = '',
+       caption = "*Data for President Biden as of Feb. 9, 2021") +
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.grid.major.y = element_blank(),
+    panel.grid.major.x = element_line(color = '#a0a2a3'),
+    panel.background = element_rect(fill = 'grey90'),
+    axis.ticks = element_blank(),
+    axis.text.x = element_text(color = '#a0a2a3'),
+    axis.text.y = element_text(color = 'black'),
+    plot.caption = element_text(hjust = 0, color = '#a0a2a3'),
+    plot.title = element_text(face = 'bold'),
+    plot.background = element_rect(fill = 'grey90'),
+    legend.position = 'top',
+    legend.justification = 'left',
+    legend.background = element_rect(fill = 'grey90'),
+    legend.direction = 'horizontal',
+    legend.key = element_rect(fill = 'grey90'),
+    legend.title = element_text(color = 'black',size = 8)
+  )
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
