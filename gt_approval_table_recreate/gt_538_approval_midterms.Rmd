@@ -1,0 +1,107 @@
+---
+title: "538 gt Table Recreation"
+author: "Andrew vanderWilden"
+date: "3/23/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+
+[FiveThirtyEight Original Article and Table](https://fivethirtyeight.com/features/why-democrats-in-congress-need-bidens-approval-rating-to-stay-in-the-mid-50s/)
+
+```{r}
+library(tidyverse)
+library(gt)
+```
+
+
+```{r}
+df <- tibble(Year = c(1994,1998,2002,2006,2010,2014,2018),
+             President = c('Clinton', 'Clinton', 'Bush', 'Bush',
+                           'Obama', 'Obama', 'Trump'),
+             Approval = c(.47,.65,.62,.37,.45,.42,.42),
+             Disapproval = c(.44,.31,.28,.57,.49,.52,.53),
+             `Pres. Party Voteshare` = c(0.45,.57,.50,.45,.44,.44,.44),
+             `Out-Party Voteshare` = c(.52,.48,.45,.52,.51,.51,.53),
+             `Pres. Party Seat Change` = c(-52,5,8,-30,-63,-13,-40))
+
+pal <- function(x) {
+  f_neg <- scales::col_numeric(
+    palette = c('#fc6995','#ffffff'),
+    domain = c(-63,0)
+  )
+  f_pos <- scales::col_numeric(
+    palette = c('#ffffff', '#ebf8f9'),
+    domain = c(0,8)
+  )
+  ifelse(x<0, f_neg(x), f_pos(x))
+}
+
+
+```
+
+
+
+```{r}
+table <- gt(df) %>%
+  data_color(columns = 7, colors = pal) %>%
+  data_color (columns = 4,
+              colors = scales::col_numeric(palette = c('#fce4d9','#ef7e4d'),
+                                           domain = c(0.28,0.57))) %>%
+  opt_all_caps(locations = 'column_labels') %>%
+  fmt_percent(columns = 3:6, decimals = 0, rows = 1) %>%
+  fmt_number(columns = 3:6, decimals = 0, rows = 2:7, scale_by = 100) %>%
+  tab_spanner(
+    label = 'PRE-ELECTION',
+    columns = 3:4
+  ) %>%
+  tab_spanner(
+    label = 'HOUSE MIDTERM RESULTS',
+    columns = 5:7
+  ) %>%
+  tab_style(
+    style = cell_borders(
+      sides = c('bottom'),
+      color = 'black',
+      weight = px(3)
+    ),
+    locations = cells_column_labels(everything())) %>%
+  cols_width(
+    contains('Party') ~ px(125)
+  ) %>%
+  tab_header(
+    title = md('**Low presidential approval tends to spell midterm trouble**'),
+    subtitle = md("Relationship between presidential approval ratings and results for the<br> president’s party in House midterm elections")
+  ) %>%
+  tab_options(heading.align = 'left') %>%
+  tab_source_note(
+    source_note = md('Presidential approval and disapproval ratings come from FiveThirtyEight’s approval ratings tracker for the day<br> before the midterm election for each year cited.<br><br>SOURCES: OFFICE OF THE CLERK, U.S. HOUSE OF REPRESENTATIVES; THE AMERICAN PRESIDENCY PROJECT')
+  ) %>%
+  tab_options(
+    source_notes.font.size = px(12),
+    table.border.top.color = 'transparent',
+    heading.border.bottom.color = 'transparent'
+  )
+table
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
