@@ -1,0 +1,124 @@
+---
+title: "Governors Chart"
+author: "Andrew vanderWilden"
+date: "3/30/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, comment = NA)
+```
+
+
+[FiveThirtyEight Original Article and Table](https://fivethirtyeight.com/features/a-very-early-look-at-the-2022-governor-races/)
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+df <- tibble(
+  year = seq(1946,2018,4),
+  change = c(-2, -6,-8,-5,0,-8,-11,-5,-5,-7, 8,-1,-10,0,-1,-6,-6,-3,-6),
+  party = c('dem', 'dem', 'rep', 'rep', 'dem', 'dem','rep','rep',
+            'dem', 'rep', 'rep', 'rep', 'dem', 'dem', 'rep','rep',
+            'dem', 'dem', 'rep')
+)
+
+```
+
+```{r}
+plt <- df %>%
+  ggplot(aes(year, change, fill = party)) +
+  geom_col(width = 2.7) +
+  scale_fill_manual(values = c('#008fd5', '#ff2700')) +
+  guides(fill = FALSE) +
+  labs(x = '', y = '',
+       title = "The president's party usually loses seats",
+       subtitle = 'Net change in the number of governorships that the party in the White\nHouse loses or gains in midterm elections, 1946-2018') +
+  scale_y_continuous(limits = c(-11, 11), breaks = c(-10,-5,0,5,10),
+                     labels = c('-10','-5', '0', '+5', '+10')) +
+  scale_x_continuous(breaks = seq(1950,2020, 10),
+                     labels = c('1950', "'60", "'70",
+                                "'80", "'90", '2000', "'10","'20")) +
+  geom_hline(yintercept = 0, color = 'black') +
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = 'grey90'),
+    plot.background = element_rect(fill = 'grey90'),
+    panel.grid.major = element_line(color = '#a0a2a3'),
+    axis.ticks = element_blank(),
+    axis.text = element_text(color = '#a0a2a3', size = 13),
+    plot.title = element_text(face = 'bold', size = 23)
+  ) +
+  geom_segment(aes(x = 1945, xend = 1979.5, y = 10.5, yend = 10.5),
+               size = 14, color = 'grey90') +
+  geom_segment(aes(x = 1945, xend = 1979.5, y = 7, yend = 7),
+               size = 15, color = 'grey90') +
+  geom_segment(aes(x = 1945, xend = 1979.5, y = 2.5, yend = 2.5),
+               size = 14, color = 'grey90') +
+  geom_segment(aes(x = 1991, xend = 2001, y = 2.5, yend = 2.5),
+               size = 14, color = 'grey90') +
+  geom_text(aes(1962,10.65,
+                label = "THERE WERE ONLY THREE TIMES WHEN THE\nPRESIDENT'S PARTY DIDN'T LOSE SEATS:",
+                fontface = 'bold'),
+            size = 5) +
+  geom_text(aes(1962, 7,
+                label = "Republicans picked up eight\ngovernorships in the 1986 midterms,\nwhen Ronald Reagan was president"),
+            size = 4.2) +
+  geom_text(aes(1962, 2.75,
+                label = "Democrats didn't gain or lose any\nground in 1962 (John. F Kennedy) ..."),
+            size = 4.2) +
+  geom_text(aes(2000, 2.5,
+                label = "... or in 1998 (Bill Clinton)"),
+            size = 4) +
+  geom_segment(aes(x = 1962, xend = 1962, y = 1.6, yend = 0.15),
+             arrow = arrow(length = unit(.02,'npc'))) +
+  geom_segment(aes(x = 1998, xend = 1998, y = 1.6, yend = 0.15),
+             arrow = arrow(length = unit(.02,'npc'))) +
+  geom_curve(aes(x = 1972, xend = 1985.5, y = 7, yend = 8.25),
+             arrow = arrow(length = unit(.02,'npc')),
+             curvature = -.35)
+
+
+plt
+
+#ggsave('governorships.png', width = 304.27, height = 264.054, units = 'mm', dpi = 300)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
